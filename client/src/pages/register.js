@@ -1,0 +1,61 @@
+import Navbar from "@/components/Navbar";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { API_URL } from "@/constants";
+
+export default function Register() {
+    const router = useRouter();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const onPasswordChange = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const onUsernameChange = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username,
+                password,
+            }),
+        });
+        router.push("/login");
+    };
+
+    return (
+        <>  <main className="flex flex-col w-screen h-screen items-center">
+                <h3 className="text-3xl my-12">Register</h3>
+                <form className="grid grid-cols-2 gap-2" onSubmit={onSubmit}>
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        onChange={onUsernameChange}
+                        className="px-2 py-1 rounded"
+                    />
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        onChange={onPasswordChange}
+                        className="px-2 py-1 rounded"
+                    />
+                    <button type="submit" className="col-span-2 bg-red-400 rounded">
+                        Register
+                    </button>
+                </form>
+            </main>
+        </>
+    );
+}
